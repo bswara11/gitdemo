@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Grade Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 40px;
+      background: linear-gradient(135deg, #f8dc90, #ffb347);
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #683302;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    p {
+      color: #555;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    .input-field {
+      position: relative;
+      width: 120px;
+    }
+    input[type=number] {
+      padding: 12px 15px;
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+    input[type=number]:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+      outline: none;
+    }
+    .input-field label {
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background: white;
+      padding: 0 5px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+    button {
+      display: block;
+      padding: 15px 30px;
+      margin: 20px auto;
+      background: linear-gradient(to right, #007bff, #0056b3);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .result {
+      margin: 30px auto 0;
+      font-size: 1.2rem;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .grade-display {
+      font-size: 2rem;
+      text-align: center;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+    .grade-A-plus {color: #2e7d32;}
+    .grade-A {color: #388e3c;}
+    .grade-B {color: #689f38;}
+    .grade-C {color: #ffa000;}
+    .grade-D {color: #f57c00;}
+    .grade-F {color: #d32f2f;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Student Grade Calculator</h1>
+    <p>Enter marks for 5 subjects (0-100):</p>
+
+    <div class="input-group">
+      <div class="input-field">
+        <label for="sub1">Mathematics</label>
+        <input type="number" id="sub1" placeholder="0-100" min="0" max="100">
+      </div>
+      <div class="input-field">
+        <label for="sub2">Physics</label>
+        <input type="number" id="sub2" placeholder="0-100" min="0" max="100">
+      </div>
+      <div class="input-field">
+        <label for="sub3">Chemistry</label>
+        <input type="number" id="sub3" placeholder="0-100" min="0" max="100">
+      </div>
+      <div class="input-field">
+        <label for="sub4">English</label>
+        <input type="number" id="sub4" placeholder="0-100" min="0" max="100">
+      </div>
+      <div class="input-field">
+        <label for="sub5">BEE</label>
+        <input type="number" id="sub5" placeholder="0-100" min="0" max="100">
+      </div>
+    </div>
+
+    <button onclick="calculate()">Calculate Grade</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      const marks = [
+        parseFloat(document.getElementById('sub1').value),
+        parseFloat(document.getElementById('sub2').value),
+        parseFloat(document.getElementById('sub3').value),
+        parseFloat(document.getElementById('sub4').value),
+        parseFloat(document.getElementById('sub5').value)
+      ];
+
+      if (marks.some(isNaN)) {
+        alert("Please enter marks for all subjects.");
+        return;
+      }
+
+      const total = marks.reduce((a, b) => a + b, 0);
+      const average = total / marks.length;
+
+      let grade, gradeClass;
+      if (average >= 90) {
+        grade = 'A+';
+        gradeClass = 'grade-A-plus';
+      }
+      else if (average >= 80) {
+        grade = 'A';
+        gradeClass = 'grade-A';
+      }
+      else if (average >= 70) {
+        grade = 'B';
+        gradeClass = 'grade-B';
+      }
+      else if (average >= 60) {
+        grade = 'C';
+        gradeClass = 'grade-C';
+      }
+      else if (average >= 50) {
+        grade = 'D';
+        gradeClass = 'grade-D';
+      }
+      else {
+        grade = 'Fail';
+        gradeClass = 'grade-F';
+      }
+
+      const resultElement = document.getElementById('result');
+      resultElement.innerHTML = `
+        <div class="grade-display ${gradeClass}">${grade}</div>
+        <div class="stat-row">
+          <span>Total Marks:</span>
+          <strong>${total} / 500</strong>
+        </div>
+        <div class="stat-row">
+          <span>Average:</span>
+          <strong>${average.toFixed(2)}%</strong>
+        </div>
+        <div class="stat-row">
+          <span>Result:</span>
+          <strong>${grade === 'Fail' ? 'Better luck next time' : 'Passed'}</strong>
+        </div>
+      `;
+      
+      resultElement.classList.add('show');
+    }
+  </script>
+</body>
+</html>
